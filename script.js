@@ -1078,13 +1078,13 @@ searchBar.addEventListener("keyup", (e) => {
     }
 });
 
-
 function clearPokemonList() {
     const list = document.querySelector(".list-of-pokemons");
     while (list.firstChild) {
         list.removeChild(list.firstChild);
     }
     pokemonShown = 0;
+    searchBar.value = "";
 }
 
 function displayPokemonNames(pName){
@@ -1095,8 +1095,9 @@ function displayPokemonNames(pName){
 
 const url = 'https://pokeapi.co/api/v2/pokemon/';
 goFetch();
-var pName, pID, pBaseExperience, pHeight, pHp, pAttack, pDefense, pSpecialAttack, pSpecialDefense, pSpeed, pPicture, pGif1, pGif2, pGif3, pGif4;
+var pName, pID, pBaseExperience, pHeight, pWeight, pHp, pAttack, pDefense, pSpecialAttack, pSpecialDefense, pSpeed, pPicture, pGif1, pGif2, pGif3, pGif4;
 
+let ignoreFirstTime = 1;
 function goFetch(){
 
     var pokemonNameSearched = searchBar.value.toLowerCase();
@@ -1108,6 +1109,42 @@ function goFetch(){
 fetch(url + pokemonNameSearched)
 .then(response => response.json())
 .then(data => {
+
+    if(ignoreFirstTime == 1){
+        ignoreFirstTime = 0;
+    }
+    else{
+        var imgelement1 = document.getElementById("img1");
+        var imgelement2 = document.getElementById("img2");
+        var searchBarElement = document.getElementById("pokemon-search-bar");
+        imgelement1.style.animation="rotateTopPart 0.75s linear forwards";
+        imgelement2.style.animation="rotateBottomPart 0.75s linear forwards";
+        searchBarElement.style.animation="resize 0.3s linear forwards";
+        
+        var formElement = document.getElementById("search-form");
+        formElement.addEventListener("mouseenter",()=>{
+            console.log("mouse entered");
+            imgelement1.style.animation="openTopPart .25s linear forwards";
+            imgelement2.style.animation="openBottomPart .25s linear forwards";
+            searchBarElement.style.animation="resizeBack 0.3s linear forwards";
+        });
+        formElement.addEventListener("mouseleave",()=>{
+            console.log("mouse left");
+            imgelement1.style.animation="rotateTopPart 0.75s linear forwards";
+            imgelement2.style.animation="rotateBottomPart 0.75s linear forwards";
+            searchBarElement.style.animation="resize 0.3s linear forwards";
+        });
+
+
+
+//     const styleSheet = document.styleSheets[0];
+//     styleSheet.insertRule(`
+//         form:hover #img1 {
+//     animation: openTopPart .25s linear forwards;
+//     transform-origin: bottom center;
+// }`);
+    }
+    
     //searchBar.value = "";
     //pokemon.textContent = data.name;
 
@@ -1131,6 +1168,7 @@ fetch(url + pokemonNameSearched)
     pSpeed = data.stats[5].base_stat;
     pBaseExperience = data.base_experience;
     pHeight = data.height;
+    pWeight = data.weight;
 
     pPicture = data.sprites.other['official-artwork'].front_default;
 
@@ -1149,6 +1187,7 @@ fetch(url + pokemonNameSearched)
     document.getElementById("Pokemon-Speed").textContent = "Speed: " + pSpeed;
     document.getElementById("Pokemon-Base-Experience").textContent = "Base Experience: " + pBaseExperience;
     document.getElementById("Pokemon-Height").textContent = "Height: " + pHeight;
+    document.getElementById("Pokemon-Weight").textContent = "Weight: " + pWeight;
 
     document.getElementById("pokemon-img").src = pPicture;
     document.getElementById("gif1").style.backgroundImage = "url(" + data.sprites.other.showdown.front_default + ")";
