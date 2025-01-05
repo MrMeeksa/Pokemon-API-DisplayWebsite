@@ -1,0 +1,193 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*either make cards and have previous and next loaded and you 
+can then just click next or prev to see that pokemon thats 
+next by id
+
+OR/AND
+
+Pokemon shown plus search engine ofc
+animations when loading in*/
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #fff;
+}
+
+.large-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+}
+
+.center{
+    display: flex;
+    align-items: center;
+    width: 70%;
+    height: 100vh;
+    flex-direction: column;
+    background-color: rgb(172, 194, 236);
+}
+
+/* Container for the main content */
+.main-container {
+    width: 70%;
+    padding: 1rem;
+    background: #a04949;
+    height: 50vh;
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    position: relative;
+    /* display: none; Hide the container by default */
+}
+
+.container-data {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.5rem;
+    overflow-y: auto;
+}
+#pokemon-img{
+    height: 100%;
+    width: 100%;
+}
+.container-gif{
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+
+}
+.left-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 15%;
+    height: 100vh;
+    /* position: relative;
+    left: 0; */
+    background-color: rgb(190, 160, 102);
+}
+.right-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 15%;
+    height: 100vh;
+    /* position: relative;
+    right: 0; */
+    background-color: rgb(190, 160, 102);
+}
+.search-bar-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* position: absolute; */
+    height: 4rem;
+    width: 8rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+}
+#img1 {
+}
+#img2 {
+
+}
+
+/* Header styles */
+header {
+    color: #fff;
+    /* padding: 10px 0; */
+    text-align: center;
+    line-height: 1;
+}
+
+header h1 {
+    margin: 0;
+}
+header #Pokemon-ID {
+    color:rgb(51,51,51,0.75);
+}
+
+/* Navigation styles */
+nav {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
+form input {
+    padding: 10px;
+    width: 50%;
+    height: 3rem;
+    color: black;
+    font-size: 1.5rem;
+    background-color: rgb(255, 255, 255);
+    background-image: conic-gradient(white 180deg,red 180deg);
+    padding: 0 1.6rem;
+    text-align: center;
+    border-radius: 1.5rem;
+    border: 5px solid black;
+    /* box-shadow: rgba(0, 0, 0, 0.4) 0px 5px, rgba(0, 0, 0, 0.3) 0px 10px,rgba(0, 0, 0, 0.2) 0px 15px,
+    rgba(0, 0, 0, 0.4) 0px -5px, rgba(0, 0, 0, 0.3) 0px -10px,rgba(0, 0, 0, 0.2) 0px -15px */
+}
+input::placeholder{
+    color: black;
+    font-size: 1.5rem;
+}
+
+.list-of-pokemons{
+    list-style-type: none;
+    width: 45%;
+    text-align: center;
+}
+
+.list-of-pokemons li{
+    background-color: white;
+    color: black;
+    border-radius: 1.5rem;
+    border-bottom:#333 1px solid;
+    background-image: conic-gradient(red 180deg,white 180deg);
+}
+.list-of-pokemons li:hover{
+    background-color: rgb(255, 255, 255);
+    background-image: conic-gradient(white 180deg,red 180deg);
+    transition: 0.5s linear;
+}
+/* Main content styles */
+main {
+    margin: 2rem 0;
+}
+
+/* Footer styles */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
