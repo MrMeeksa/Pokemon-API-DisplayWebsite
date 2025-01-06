@@ -1092,7 +1092,7 @@ function displayPokemonNames(pName){
 }
 
 //SECOND PART FROM HTML PASTED HERE ---------------------------------------------------------------------------------
-
+var animationsEnded = false;
 const url = 'https://pokeapi.co/api/v2/pokemon/';
 goFetch();
 var pName, pID, pBaseExperience, pHeight, pWeight, pHp, pAttack, pDefense, pSpecialAttack, pSpecialDefense, pSpeed, pPicture, pGif1, pGif2, pGif3, pGif4;
@@ -1110,40 +1110,67 @@ fetch(url + pokemonNameSearched)
 .then(response => response.json())
 .then(data => {
 
+    var mainContainerElement = document.getElementById("main-container");
+    var formElement = document.getElementById("search-form");
+    let isMouseInside = false;
+    var imgelement1 = document.getElementById("img1");
+    var imgelement2 = document.getElementById("img2");
+    var searchBarElement = document.getElementById("pokemon-search-bar");
+    var timeleft,animationTimer;
+
+    
     if(ignoreFirstTime == 1){
         ignoreFirstTime = 0;
+        mainContainerElement.classList.add("doAnimation");
+        // mainContainerElement.style.animation = "showcontainer 1s forwards";
     }
     else{
-        var imgelement1 = document.getElementById("img1");
-        var imgelement2 = document.getElementById("img2");
-        var searchBarElement = document.getElementById("pokemon-search-bar");
-        imgelement1.style.animation="rotateTopPart 0.75s linear forwards";
-        imgelement2.style.animation="rotateBottomPart 0.75s linear forwards";
-        searchBarElement.style.animation="resize 0.3s linear forwards";
+        console.log("not first time");
+        animationsEnded = false;
+        StartClosingSearchAnimations(imgelement1,imgelement2,searchBarElement);
+        const elm = mainContainerElement;
+        var newone = elm.cloneNode(true);
+        elm.parentNode.replaceChild(newone, elm);
+        // mainContainerElement.style.animation = "";
+        // mainContainerElement.style.animation = "showcontainer 1s forwards";
+
+        timeleft = 0.75;
+        animationTimer = setInterval(function(){
+        if(timeleft <= 0){
+            clearInterval(animationTimer);
+            ReopenPokeballAnimation(imgelement1,imgelement2,searchBarElement);
+        }
+        timeleft -= 1;
+        }, 400);
+
+        imgelement1.addEventListener("animationend", () => {
+            animationsEnded = true;
+        });
+
+        // console.log("animationsEnded: " + animationsEnded); this doesnt work bcuz its insnatnly called
+        // animationsEnded = SetAnimationState();
+        MouseCheck(formElement, imgelement1, imgelement2, searchBarElement, isMouseInside);
+        //MouseCheck(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside,timeleft);
+        // if(isMouseInside){
+        //     imgelement1.style.animation="openTopPart .25s linear forwards";
+        //     imgelement2.style.animation="openBottomPart .25s linear forwards";
+        //     searchBarElement.style.animation="resizeBack 0.3s linear forwards";
+        // }
         
-        var formElement = document.getElementById("search-form");
-        formElement.addEventListener("mouseenter",()=>{
-            console.log("mouse entered");
-            imgelement1.style.animation="openTopPart .25s linear forwards";
-            imgelement2.style.animation="openBottomPart .25s linear forwards";
-            searchBarElement.style.animation="resizeBack 0.3s linear forwards";
-        });
-        formElement.addEventListener("mouseleave",()=>{
-            console.log("mouse left");
-            imgelement1.style.animation="rotateTopPart 0.75s linear forwards";
-            imgelement2.style.animation="rotateBottomPart 0.75s linear forwards";
-            searchBarElement.style.animation="resize 0.3s linear forwards";
-        });
+        // MouseEnteredFormAnimate(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside);
+        // MouseLeftFormAnimate(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside);
 
+    }
 
-
+//#region  ConsoleLogs
+/*
 //     const styleSheet = document.styleSheets[0];
 //     styleSheet.insertRule(`
 //         form:hover #img1 {
 //     animation: openTopPart .25s linear forwards;
 //     transform-origin: bottom center;
 // }`);
-    }
+    
     
     //searchBar.value = "";
     //pokemon.textContent = data.name;
@@ -1156,8 +1183,21 @@ fetch(url + pokemonNameSearched)
     // console.log(data.stats[2].base_stat); //defense
     // console.log(data.stats[3].base_stat); //special-attack
     // console.log(data.stats[4].base_stat); //special-defense
-    // console.log(data.stats[5].base_stat); //speed
+    // console.log(data.stats[5].base_stat); //speed*/
 
+        // //picture
+    // console.log(data.sprites.other['official-artwork'].front_default);
+
+    // //gifs
+    // console.log(data.sprites.other.showdown.front_default);
+    // console.log(data.sprites.other.showdown.back_default);
+    // console.log(data.sprites.other.showdown.front_shiny);
+    // console.log(data.sprites.other.showdown.back_shiny);
+
+//#endregion
+    
+
+//#region Assigning values to variables and displaying them
     pName = data.name;
     pID = data.id;
     pHp = data.stats[0].base_stat;
@@ -1194,22 +1234,48 @@ fetch(url + pokemonNameSearched)
     document.getElementById("gif2").style.backgroundImage = "url(" + data.sprites.other.showdown.back_default + ")";
     document.getElementById("gif3").style.backgroundImage = "url(" + data.sprites.other.showdown.front_shiny + ")";
     document.getElementById("gif4").style.backgroundImage = "url(" + data.sprites.other.showdown.back_shiny + ")";
-
+//#endregion
 
 
     console.log("SUCCESS");
-    // //picture
-    // console.log(data.sprites.other['official-artwork'].front_default);
 
-    // //gifs
-    // console.log(data.sprites.other.showdown.front_default);
-    // console.log(data.sprites.other.showdown.back_default);
-    // console.log(data.sprites.other.showdown.front_shiny);
-    // console.log(data.sprites.other.showdown.back_shiny);
 })
-.catch(error => console.log(error));
+.catch(error => console.log(error) + alert("Pokemon not found"));
 }
 
+function MouseCheck(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside){
+    MouseEnteredFormAnimate(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside);
+    MouseLeftFormAnimate(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside);
+}
+function MouseEnteredFormAnimate(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside){
+    
+    formElement.addEventListener("mouseover",()=>{
+        console.log("mouse entered");
+        isMouseInside = true;
+        if(animationsEnded){
+            imgelement1.style.animation="openTopPart .25s linear forwards";
+            imgelement2.style.animation="openBottomPart .25s linear forwards";
+            searchBarElement.style.animation="resizeBack 0.3s linear forwards";
+        }
+    });
+}
+function MouseLeftFormAnimate(formElement,imgelement1,imgelement2,searchBarElement,isMouseInside){
+    formElement.addEventListener("mouseleave",()=>{
+        console.log("mouse left");
+        isMouseInside = false;
+        if(searchBar.value == ""){
+        imgelement1.style.animation="rotateTopPart 0.75s linear forwards";
+        imgelement2.style.animation="rotateBottomPart 0.75s linear forwards";
+        searchBarElement.style.animation="resize 0.3s linear forwards";
+    }
+    });
+}
+
+function ReopenPokeballAnimation(imgelement1,imgelement2,searchBarElement){
+    imgelement1.style.animation="openTopPart .25s linear forwards";
+    imgelement2.style.animation="openBottomPart .25s linear forwards";
+    searchBarElement.style.animation="resizeBack 0.3s linear forwards";
+}
 function organizeID(id){
     if(id<10){
         return "000" + id;
@@ -1224,3 +1290,39 @@ function organizeID(id){
         return id;
     }
 }
+function StartClosingSearchAnimations(imgelement1,imgelement2,searchBarElement){
+    imgelement1.style.animation="rotateTopPart 0.75s linear forwards";
+    imgelement2.style.animation="rotateBottomPart 0.75s linear forwards";
+    searchBarElement.style.animation="resize 0.3s linear forwards";
+}
+
+/*biggest stats
+
+hp:255
+attack:165
+defense:230
+special-attack:194
+special-defense:230
+speed:180
+base_experience:608
+height:14
+weight:999
+
+---
+Here is the list of Pokémon with the highest base stats in each category, considering only their standard forms and those available in PokeAPI:
+
+Defense: Shuckle (Base Defense: 230)
+Special Attack: Alakazam (Base Special Attack: 135)
+Special Defense: Shuckle (Base Special Defense: 230)
+Speed: Ninjask (Base Speed: 160)
+Base Experience: Blissey (Base Experience: 608)
+Height: Wailord (Height: 14.5 meters)
+Weight: Snorlax (Weight: 460 kg)
+---
+
+remember, wieght is in hectograms, so 999 hectograms = 99.9 kg
+height is in decimetres, so 14 decimetres = 1.4 meters
+
+
+
+*/

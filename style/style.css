@@ -11,6 +11,11 @@ OR/AND
 
 Pokemon shown plus search engine ofc
 animations when loading in*/
+
+:root{
+    --main-container-height: 60vh;
+}
+
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -36,17 +41,17 @@ body {
 
 /* Container for the main content */
 .main-container {
-    width: 70%;
+    width: 80%;
     padding: 1rem;
     background: #a04949;
-    height: 50vh;
+    height: var(--main-container-height);
     box-shadow: 20px 20px 10px rgba(0, 0, 0, 1);
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     position: relative;
     /* display: none; */
-    animation: showcontainer 1s forwards;
+    /* animation: showcontainer 1s forwards; */
     transform-origin: center;
 }
 
@@ -215,7 +220,9 @@ form:hover #img2 {
 /* Media queries */
 
 
-
+.doAnimation{
+    animation: showcontainer 1s forwards;
+}
 /*animations*/
 @keyframes resize {
     0% {
@@ -308,12 +315,11 @@ form:hover #img2 {
         transform: translateY(0);
     }
 }
-
 @keyframes showcontainer {
     0% {
         height: 0%;
     }
     100% {
-        height: height;
+        height: var(--main-container-height);
     }
 }
