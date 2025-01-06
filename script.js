@@ -1217,23 +1217,70 @@ fetch(url + pokemonNameSearched)
     //make id look right
     pID = organizeID(pID);
 
+    // document.getElementById("Pokemon-Name").textContent = pName;
+    // document.getElementById("Pokemon-ID").textContent = "#" + pID;
+    // document.getElementById("Pokemon-HP").textContent = "HP: " + pHp;
+    // document.getElementById("Pokemon-Attack").textContent = "Attack: " + pAttack;
+    // document.getElementById("Pokemon-Defense").textContent = "Defense: " + pDefense;
+    // document.getElementById("Pokemon-Special-Attack").textContent = "Special-Attack: " + pSpecialAttack;
+    // document.getElementById("Pokemon-Special-Defense").textContent = "Special-Defense: " + pSpecialDefense;
+    // document.getElementById("Pokemon-Speed").textContent = "Speed: " + pSpeed;
+    // document.getElementById("Pokemon-Base-Experience").textContent = "Base Experience: " + pBaseExperience;
+    // document.getElementById("Pokemon-Height").textContent = "Height: " + pHeight;
+    // document.getElementById("Pokemon-Weight").textContent = "Weight: " + pWeight;
+
+    // document.getElementById("pokemon-img").src = pPicture;
+    // document.getElementById("gif1").style.backgroundImage = "url(" + data.sprites.other.showdown.front_default + ")";
+    // document.getElementById("gif2").style.backgroundImage = "url(" + data.sprites.other.showdown.back_default + ")";
+    // document.getElementById("gif3").style.backgroundImage = "url(" + data.sprites.other.showdown.front_shiny + ")";
+    // document.getElementById("gif4").style.backgroundImage = "url(" + data.sprites.other.showdown.back_shiny + ")";
+
+    //THE GRAPHS: ----------------------------------------------------------------------------------------------
     document.getElementById("Pokemon-Name").textContent = pName;
     document.getElementById("Pokemon-ID").textContent = "#" + pID;
-    document.getElementById("Pokemon-HP").textContent = "HP: " + pHp;
-    document.getElementById("Pokemon-Attack").textContent = "Attack: " + pAttack;
-    document.getElementById("Pokemon-Defense").textContent = "Defense: " + pDefense;
-    document.getElementById("Pokemon-Special-Attack").textContent = "Special-Attack: " + pSpecialAttack;
-    document.getElementById("Pokemon-Special-Defense").textContent = "Special-Defense: " + pSpecialDefense;
-    document.getElementById("Pokemon-Speed").textContent = "Speed: " + pSpeed;
-    document.getElementById("Pokemon-Base-Experience").textContent = "Base Experience: " + pBaseExperience;
-    document.getElementById("Pokemon-Height").textContent = "Height: " + pHeight;
-    document.getElementById("Pokemon-Weight").textContent = "Weight: " + pWeight;
-
     document.getElementById("pokemon-img").src = pPicture;
     document.getElementById("gif1").style.backgroundImage = "url(" + data.sprites.other.showdown.front_default + ")";
     document.getElementById("gif2").style.backgroundImage = "url(" + data.sprites.other.showdown.back_default + ")";
     document.getElementById("gif3").style.backgroundImage = "url(" + data.sprites.other.showdown.front_shiny + ")";
     document.getElementById("gif4").style.backgroundImage = "url(" + data.sprites.other.showdown.back_shiny + ")";
+
+    var graphElement = document.getElementById("Graph-Points");
+    var graphPoints = graphElement.getAttribute("points");
+    //example: 202 107 73 181 74 333 202 406 332 332 332 182
+    //first we get the fractal values of the stats
+    var hpPercentage = (pHp / 255).toFixed(2);
+    var attackPercentage = (pAttack / 165).toFixed(2);
+    var defensePercentage = (pDefense / 230).toFixed(2);
+    var specialAttackPercentage = (pSpecialAttack / 194).toFixed(2);
+    var specialDefensePercentage = (pSpecialDefense / 230).toFixed(2);
+    var speedPercentage = (pSpeed / 180).toFixed(2);
+    //then we calculate the x and y coordinates of the points
+    /*
+    TOP is 107 "and 202" --- MIN is 257
+    TOP LEFT is 73 and 181 -- min is 202 257
+    BOTTOM LEFT IS 74 and 333-- min is 202 256
+    BOTTOM is 202 and 406 --- 202 256
+    BOTTOM RIGHT is 332 and 332 -- 202 256
+    TOP RIGHT is 332 and 182-- 202 257*/
+    var x1 = 202;
+    var y1 = 257 - attackPercentage * (257 - 107);
+    var x2 = 202 - hpPercentage * (202 - 73);
+    var y2 = 257 - hpPercentage * (257 - 181);
+    var x3 = 202 - specialAttackPercentage * (202 - 74);
+    var y3 = 256 - specialAttackPercentage * (258 - 333); //258 because it sems more fixed
+    var x4 = 202;
+    var y4 = 257 - specialDefensePercentage * (257 - 406);
+    var x5 = 202 - speedPercentage * (202 - 332);
+    var y5 = 256 - speedPercentage * (256 - 332);
+    var x6 = 202 + defensePercentage * (202 - 74);
+    var y6 = 257 - defensePercentage * (257 - 182);
+    //then we set the points attribute of the polygon
+    graphPoints = x1 + " " + y1 + " " + x2 + " " + y2 + " " + x3 + " " + y3 + " " + x4 + " " + y4 + " " + x5 + " " + y5 + " " + x6 + " " + y6;
+    graphElement.setAttribute("points", graphPoints);
+
+    
+
+    console.log(graphPoints);
 //#endregion
 
 
@@ -1298,6 +1345,13 @@ function StartClosingSearchAnimations(imgelement1,imgelement2,searchBarElement){
 
 /*biggest stats
 
+TOP is 107 "and 202" --- MIN is 257
+    TOP LEFT is 73 and 181 -- min is 202 257
+    BOTTOM LEFT IS 74 and 333-- min is 202 256
+    BOTTOM is 202 and 406 --- 202 256
+    BOTTOM RIGHT is 332 and 332 -- 202 256
+    TOP RIGHT is 332 and 182-- 202 257
+
 hp:255
 attack:165
 defense:230
@@ -1305,10 +1359,11 @@ special-attack:194
 special-defense:230
 speed:180
 base_experience:608
-height:14
-weight:999
+height:14.5m (145 decimetres)
+weight:460 kg (46000 hectograms)
 
 ---
+-----------GABRIOLA FONT--
 Here is the list of Pokémon with the highest base stats in each category, considering only their standard forms and those available in PokeAPI:
 
 Defense: Shuckle (Base Defense: 230)
@@ -1324,5 +1379,36 @@ remember, wieght is in hectograms, so 999 hectograms = 99.9 kg
 height is in decimetres, so 14 decimetres = 1.4 meters
 
 
+i have a polygon, it creates a sextagon, it is fit into a circle split perfectly into 6 pieces, the following coordinates are the max  values of that polygon so it touches the circle:
+ <polygon class="cls-3" points="202 107, 100 200, 150 333, 202 406, 300 332, 332 182"></polygon>
+ and these are the minimum values so that the polygon is just directly in the center of the circle:
+ <polygon class="cls-3" points="202 257 202 257 202 256 202 256 202 256 202 257">
 
+ I want you to choose random coordinates for the polygon while making sure to look at the x and y coordinates and make sure they follow the corresponding lines perfectly split circle sextagon inside.
+ The coordinates match the following order of the polygons: TOP MIDDLE, TOP LEFT, BOTTOM LEFT, BOTTOM MIDDLE, BOTTOM RIGHT, TOP RIGHT.
+
+ Calculation for 200 HP:
+Percentage of max HP: ( \frac{200}{255} \approx 0.784 )
+x-coordinate: ( 202 - 0.784 \times (202 - 73) )
+y-coordinate: ( 257 - 0.784 \times (257 - 181) )
+So, the coordinates for 200 HP are approximately:
+
+(100.864, 197.416)
+Here are the points:
+
+50 HP: (176.716, 242.104)
+200 HP: (100.864, 197.416)
+Detailed Math Instructions and Formulas:
+Calculate the percentage of max HP: [ \text{Percentage} = \frac{\text{HP}}{255} ]
+
+Calculate the x-coordinate: [ x = 202 - \text{Percentage} \times (202 - 73) ]
+
+Calculate the y-coordinate: [ y = 257 - \text{Percentage} \times (257 - 181) ]
+
+    TOP is 107 "and 202" --- MIN is 257
+    TOP LEFT is 73 and 181 -- min is 202 257
+    BOTTOM LEFT IS 74 and 333-- min is 202 256
+    BOTTOM is 202 and 406 --- 202 256
+    BOTTOM RIGHT is 332 and 332 -- 202 256
+    TOP RIGHT is 332 and 182-- 202 257
 */

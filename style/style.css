@@ -56,12 +56,17 @@ body {
 }
 
 .container-data {
-    width: 30%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 1.5rem;
-    overflow-y: auto;
+    /* overflow-y: auto; needed when no graph*/ 
+}
+.container-data svg{
+    height: 100%;
+    width: 100%;
+    /* padding: 10%; */
 }
 #pokemon-img{
     height: 100%;
@@ -109,6 +114,7 @@ body {
     background-position: center;
     
 }
+
 
 /* Header styles */
 header {
@@ -183,6 +189,16 @@ input::placeholder{
 /* Main content styles */
 main {
     margin: 1rem 0;
+    width: 100%;
+}
+.Stats-Graph{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 5rem;
+    height: 5rem;
+    background-color: rgb(190, 160, 102);
 }
 
 /* Footer styles */
