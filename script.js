@@ -1239,10 +1239,26 @@ fetch(url + pokemonNameSearched)
     document.getElementById("Pokemon-Name").textContent = pName;
     document.getElementById("Pokemon-ID").textContent = "#" + pID;
     document.getElementById("pokemon-img").src = pPicture;
-    document.getElementById("gif1").style.backgroundImage = "url(" + data.sprites.other.showdown.front_default + ")";
-    document.getElementById("gif2").style.backgroundImage = "url(" + data.sprites.other.showdown.back_default + ")";
-    document.getElementById("gif3").style.backgroundImage = "url(" + data.sprites.other.showdown.front_shiny + ")";
-    document.getElementById("gif4").style.backgroundImage = "url(" + data.sprites.other.showdown.back_shiny + ")";
+
+    // IF WINDOW IS ON PHONE 768px max width
+    var phoneWindow = window.matchMedia("(max-width: 768px)");
+
+    if(phoneWindow.matches){
+        document.getElementById("gif1").style.backgroundImage = "url(" + data.sprites.other.showdown.front_default + ")";
+        document.getElementById("gif3").style.backgroundImage = "url(" + data.sprites.other.showdown.back_default + ")";
+        document.getElementById("gif2").style.backgroundImage = "url(" + data.sprites.other.showdown.front_shiny + ")";
+        document.getElementById("gif4").style.backgroundImage = "url(" + data.sprites.other.showdown.back_shiny + ")";
+        //set search bar placeholder
+        searchBarElement.setAttribute("placeholder", "Search...");
+    }
+    else{
+        document.getElementById("gif1").style.backgroundImage = "url(" + data.sprites.other.showdown.front_default + ")";
+        document.getElementById("gif2").style.backgroundImage = "url(" + data.sprites.other.showdown.back_default + ")";
+        document.getElementById("gif3").style.backgroundImage = "url(" + data.sprites.other.showdown.front_shiny + ")";
+        document.getElementById("gif4").style.backgroundImage = "url(" + data.sprites.other.showdown.back_shiny + ")";    
+    }
+
+
 
     var graphElement = document.getElementById("Graph-Points");
     var graphPoints = graphElement.getAttribute("points");
